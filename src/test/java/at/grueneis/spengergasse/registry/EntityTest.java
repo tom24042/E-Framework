@@ -1,5 +1,6 @@
 package at.grueneis.spengergasse.registry;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,9 +13,24 @@ public class EntityTest {
 
 	@Test
 	public void createEntityFromEmptyObject() {
-		Object empty = new Object();
+		EFAttributeTestClass empty = new EFAttributeTestClass();
 		Entity entity = new Entity(empty);
 
 		assertThat(empty, is(entity.getObject()));
 	}
+
+    @Test
+    public void createEntityAndGetNotDirty() {
+        EFAttributeTestClass empty = new EFAttributeTestClass();
+        Entity entity = new Entity(empty);
+        Assert.assertFalse(entity.isObjectDirty());
+    }
+
+    @Test
+    public void createEntityAndGetDirty() {
+        EFAttributeTestClass empty = new EFAttributeTestClass();
+        Entity entity = new Entity(empty);
+        empty.setString("HELLO THERE");
+        Assert.assertTrue(entity.isObjectDirty());
+    }
 }

@@ -11,14 +11,14 @@ public class RegistryTest {
 
 	@Test
 	public void addObjectToRegistry() {
-		Parent parent = new Parent();
+		EFAttributeTestClass parent = new EFAttributeTestClass();
 
 		Registry.add(parent);
 	}
 
 	@Test
 	public void addObjectToRegistryTwice() {
-		Parent parent = new Parent();
+		EFAttributeTestClass parent = new EFAttributeTestClass();
 
 		Registry.add(parent);
 		Registry.add(parent);
