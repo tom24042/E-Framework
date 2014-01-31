@@ -13,7 +13,7 @@ public class EntityTest {
 
 	@Test
 	public void createEntityFromEmptyObject() {
-		EFAttributeTestClass empty = new EFAttributeTestClass();
+		EFAttributeTestClass empty = new EFAttributeTestClass(1);
 		Entity entity = new Entity(empty);
 
 		assertThat(empty, is(entity.getObject()));
@@ -21,14 +21,14 @@ public class EntityTest {
 
     @Test
     public void createEntityAndGetNotDirty() {
-        EFAttributeTestClass empty = new EFAttributeTestClass();
+        EFAttributeTestClass empty = new EFAttributeTestClass(1);
         Entity entity = new Entity(empty);
         Assert.assertFalse(entity.isObjectDirty());
     }
 
     @Test
     public void createEntityAndGetDirty() {
-        EFAttributeTestClass empty = new EFAttributeTestClass();
+        EFAttributeTestClass empty = new EFAttributeTestClass(1);
         Entity entity = new Entity(empty);
         empty.setString("HELLO THERE");
         Assert.assertTrue(entity.isObjectDirty());

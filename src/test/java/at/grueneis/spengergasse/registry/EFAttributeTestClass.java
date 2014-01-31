@@ -13,9 +13,9 @@ public class EFAttributeTestClass extends BasePersistable
 {
     private String m_String;
 
-    public EFAttributeTestClass()
+    public EFAttributeTestClass(long id)
     {
-
+        this.setId(id);
     }
 
     @EFAttribute

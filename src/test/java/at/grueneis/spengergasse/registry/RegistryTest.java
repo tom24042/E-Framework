@@ -8,19 +8,18 @@ import org.junit.Test;
 public class RegistryTest {
 
 
+    @Test
+    public void addObjectToRegistry() throws EntityAlreadyAddedException {
+        EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
 
-	@Test
-	public void addObjectToRegistry() {
-		EFAttributeTestClass parent = new EFAttributeTestClass();
+        Registry.add(objectToAdd);
+    }
 
-		Registry.add(parent);
-	}
+    @Test(expected = EntityAlreadyAddedException.class)
+    public void addObjectToRegistryTwice() throws EntityAlreadyAddedException {
+        EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
 
-	@Test
-	public void addObjectToRegistryTwice() {
-		EFAttributeTestClass parent = new EFAttributeTestClass();
-
-		Registry.add(parent);
-		Registry.add(parent);
-	}
+        Registry.add(objectToAdd);
+        Registry.add(objectToAdd);
+    }
 }

@@ -19,7 +19,7 @@ public class Entity {
         this.originalHashValue = calculateHashValueOfOriginalObject();
     }
 
-    public BasePersistable getObject() {
+    protected BasePersistable getObject() {
         return this.originalObject;
     }
 
@@ -35,18 +35,30 @@ public class Entity {
 
         for (Method method : methods) {
             if (method.getParameterTypes().length == 0) {
-                for (Annotation a : Arrays.asList(method.getAnnotations())) {
-                    if (a.annotationType().equals(EFAttribute.class)) {
-                        try {
-                            hashValue += method.invoke(null).hashCode();
-                        } catch (Exception ex) {
-                            throw new RuntimeException(ex);
-                        }
+                if (method.isAnnotationPresent(EFAttribute.class)) {
+                    try {
+                        hashValue += (method.invoke(originalObject, null) + "").hashCode();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
             }
         }
 
         return hashValue;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Entity) {
+            return originalObject.getId() == ((Entity) other).getObject().getId() && originalObject.getClass().equals(((Entity) other).getObject().getClass());
+        } else {
+            return false;
+        }
     }
 }
