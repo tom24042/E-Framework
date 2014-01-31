@@ -5,7 +5,7 @@
  */
 package at.grueneis.spengergasse.lesson_plan.domain;
 
-public class Lesson {
+public class Lesson extends BasePersistable{
 
     private final TeachingUnit teachingUnit;
     private final Teacher teacher;
@@ -92,4 +92,18 @@ public class Lesson {
             throw new IllegalArgumentException(argumentName
                     + " must not be null");
     }
+
+	@Override
+	public String[] getAllAttributesAsString() {
+//		 	private final TeachingUnit teachingUnit;
+//		    private final Teacher teacher;
+//		    private final ClassRoom classRoom;
+//		    private final SchoolClass schoolClass;
+		return new String[]{
+			teachingUnit.calculateMd5Hash(),
+			teacher.calculateMd5Hash(),
+			classRoom.calculateMd5Hash(),
+			schoolClass.calculateMd5Hash()
+		};
+	}
 }
