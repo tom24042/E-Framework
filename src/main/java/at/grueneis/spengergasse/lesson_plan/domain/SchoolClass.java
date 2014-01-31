@@ -5,7 +5,7 @@
  */
 package at.grueneis.spengergasse.lesson_plan.domain;
 
-public class SchoolClass {
+public class SchoolClass extends BasePersistable{
     private final String name;
 
     public SchoolClass(String name) {
@@ -42,4 +42,11 @@ public class SchoolClass {
     public String toString() {
         return "SchoolClass [name=" + name + "]";
     }
+
+	@Override
+	public String[] getAllAttributesAsString() {
+		return new String[]{
+			name
+		};
+	}
 }

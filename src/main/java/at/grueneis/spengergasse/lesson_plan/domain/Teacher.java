@@ -60,4 +60,18 @@ public class Teacher extends BasePersistable implements Serializable {
                 + firstname + ", lastname=" + lastname + ", birthdate="
                 + birthdate + ", email=" + email + "]";
     }
+
+	@Override
+	public String[] getAllAttributesAsString() {
+//		private final String firstname;
+//	    private final String lastname;
+//	    private Date birthdate;
+//	    private final String email;
+		return new String[]{
+			firstname,
+			lastname,
+			birthdate.toString(),
+			email
+		};
+	}
 }

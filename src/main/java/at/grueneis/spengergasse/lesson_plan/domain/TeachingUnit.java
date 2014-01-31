@@ -8,7 +8,7 @@ package at.grueneis.spengergasse.lesson_plan.domain;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class TeachingUnit implements Serializable {
+public class TeachingUnit extends BasePersistable implements Serializable {
 
     private static final long serialVersionUID = -8191255976454225754L;
 
@@ -50,4 +50,14 @@ public class TeachingUnit implements Serializable {
     public String toString() {
         return "TeachingUnit [uuid=" + uuid + "]";
     }
+
+	@Override
+	public String[] getAllAttributesAsString() {
+//		    private final UUID uuid;
+//		    private final String name;
+		return new String[]{
+				uuid.toString(),
+				name
+		};
+	}
 }

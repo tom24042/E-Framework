@@ -5,7 +5,7 @@
  */
 package at.grueneis.spengergasse.lesson_plan.domain;
 
-public class ClassRoom {
+public class ClassRoom extends BasePersistable{
     private final String name;
     private final String floor;
     private final String building;
@@ -71,4 +71,14 @@ public class ClassRoom {
         return "ClassRoom [name=" + name + ", floor=" + floor + ", building="
                 + building + "]";
     }
+
+	@Override
+	public String[] getAllAttributesAsString() {
+//		    private final String name;
+//		    private final String floor;
+//		    private final String building;
+		return new String[]{
+				name, floor, building
+		};
+	}
 }

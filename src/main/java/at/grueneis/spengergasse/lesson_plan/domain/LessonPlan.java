@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class LessonPlan {
+public class LessonPlan extends BasePersistable {
     private final String name;
     private final SchoolYear schoolYear;
     private final List<Lesson> lessons;
@@ -31,4 +31,17 @@ public class LessonPlan {
         // return returnList;
         return Collections.unmodifiableCollection(lessons);
     }
+
+	@Override
+	public String[] getAllAttributesAsString() {
+//		private final String name;
+//	    private final SchoolYear schoolYear;
+//	    private final List<Lesson> lessons;
+		ArrayList<String> arrayList = new ArrayList<String>();
+		arrayList.add(name);
+		arrayList.add(schoolYear.calculateMd5Hash());
+		for(Lesson l : lessons) arrayList.add(l.calculateMd5Hash());
+		
+		return (String[]) arrayList.toArray();
+	}
 }

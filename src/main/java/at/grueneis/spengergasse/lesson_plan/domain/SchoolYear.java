@@ -7,7 +7,7 @@ package at.grueneis.spengergasse.lesson_plan.domain;
 
 import java.util.Date;
 
-public class SchoolYear {
+public class SchoolYear extends BasePersistable{
     private final String name;
     private final Date start;
     private final Date end;
@@ -72,4 +72,16 @@ public class SchoolYear {
         return "SchoolYear [name=" + name + ", start=" + start + ", end=" + end
                 + "]";
     }
+
+	@Override
+	public String[] getAllAttributesAsString() {
+//		    private final String name;
+//		    private final Date start;
+//		    private final Date end;
+		return new String[]{
+				name, 
+				start.toString(),
+				end.toString()
+		};
+	}
 }
