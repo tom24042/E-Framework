@@ -1,4 +1,4 @@
-package at.grueneis.spengergasse.registry5;
+package at.grueneis.spengergasse.registry;
 
 import org.junit.Test;
 
