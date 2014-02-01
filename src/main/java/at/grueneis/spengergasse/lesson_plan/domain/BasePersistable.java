@@ -55,8 +55,8 @@ public abstract class BasePersistable {
     }
     
     /**
-     * -) If the attribute is an object reference, the value in the string should be the md5Hash of the referenced object.
-     * -) If the attribute is a list containing object references , the value should be the hashes of all elements in the list
+     * -) If the attribute is an object reference, the value in the string should be the ID of the referenced object.
+     * -) If the attribute is a list containing object references , the value should be the IDs of all elements in the list
      * @return String[]: Returns a Stringarray containing the values of all attributes. (1 element per attribute). 
      */
     public abstract String[] getAllAttributesAsString();

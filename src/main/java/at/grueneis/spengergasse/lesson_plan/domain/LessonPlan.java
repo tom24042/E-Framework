@@ -39,8 +39,8 @@ public class LessonPlan extends BasePersistable {
 //	    private final List<Lesson> lessons;
 		ArrayList<String> arrayList = new ArrayList<String>();
 		arrayList.add(name);
-		arrayList.add(schoolYear.calculateMd5Hash());
-		for(Lesson l : lessons) arrayList.add(l.calculateMd5Hash());
+		arrayList.add(""+schoolYear.getId());
+		for(Lesson l : lessons) arrayList.add(""+l.getId());
 		
 		return (String[]) arrayList.toArray();
 	}
