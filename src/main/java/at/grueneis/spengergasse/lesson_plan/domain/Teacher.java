@@ -24,6 +24,16 @@ public class Teacher extends BasePersistable implements Serializable {
         this.birthdate = birthdate;
         this.email = email;
     }
+    
+    public Teacher(Long id, String firstname, String lastname, Date birthdate,
+            String email, String md5Hash) {
+        this.setId(id);
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.birthdate = birthdate;
+        this.email = email;
+        this.setMd5Hash(md5Hash);
+    }
 
     public Teacher(String firstname, String lastname, Date birthdate,
             String email) {

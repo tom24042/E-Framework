@@ -227,8 +227,14 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     @Override
     public void save(T t) {
         if (t.getId() == null) {
+        	t.updateMd5Hash();
             insert(t);
         } else {
+        	T fromDB = findById(t.getId());
+        	if(!t.getMd5Hash().equals(fromDB.getMd5Hash())){
+        		throw new LessonPlanDataAccessException("Could not update in DB because object has been changed in DB since last loading!");
+        	}
+        	t.updateMd5Hash();
             update(t);
         }
     }

@@ -15,9 +15,20 @@ import java.security.NoSuchAlgorithmException;
  */
 public abstract class BasePersistable {
 
-    private Long id;
-    
+   
+	
 
+	private Long id;
+    private String md5Hash;
+    
+    public String getMd5Hash() {
+		return md5Hash;
+	}
+
+    public void setMd5Hash(String md5Hash) {
+		this.md5Hash = md5Hash;
+	}
+    
     public Long getId() {
         return id;
     }
@@ -73,6 +84,10 @@ public abstract class BasePersistable {
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException("Failed to generate md5Hash of basePersistable with id " + getId(),e);
 		}
+    }
+    
+    public void updateMd5Hash(){
+    	setMd5Hash(calculateMd5Hash());
     }
     
     

@@ -28,7 +28,7 @@ public class TeacherDao extends AbstractDatabaseDao<Teacher> {
 
     @Override
     protected String[] otherColumnNames() {
-        return new String[]{"firstname", "lastname", "birthdate", "email"};
+        return new String[]{"firstname", "lastname", "birthdate", "email", "md5Hash"};
     }
 
     @Override
@@ -47,6 +47,7 @@ public class TeacherDao extends AbstractDatabaseDao<Teacher> {
             String lastname = resultSet.getString("lastname");
             Date birthdate = resultSet.getDate("birthdate");
             String email = resultSet.getString("email");
+            String md5Hash = resultSet.getString("md5Hash");
             return new Teacher(id, firstname, lastname, birthdate, email);
         } catch (SQLException e) {
             throw new LessonPlanDataAccessException("Failed at binding teacher", e);
