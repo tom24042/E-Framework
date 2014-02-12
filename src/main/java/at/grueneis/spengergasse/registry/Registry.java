@@ -29,7 +29,7 @@ public class Registry {
         throw new EntityNotFoundException(id, type);
     }
 
-    public static Collection<EFPersistable> getDirtyObjects() {
+    public static List<EFPersistable> getDirtyObjects() {
         ArrayList<EFPersistable> dirtyEntities = new ArrayList<>();
         for(Entity entity: entities)
         {
@@ -37,7 +37,7 @@ public class Registry {
                 dirtyEntities.add(entity.getObject());
         }
 
-        return Collections.unmodifiableCollection(dirtyEntities);
+        return Collections.unmodifiableList(dirtyEntities) ;
     }
 
     public static void forceAdd(EFPersistable objectToAdd) {
