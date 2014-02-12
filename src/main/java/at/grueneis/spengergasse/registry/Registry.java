@@ -1,6 +1,8 @@
 package at.grueneis.spengergasse.registry;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,8 +29,15 @@ public class Registry {
         throw new EntityNotFoundException(id, type);
     }
 
-    public static List<EFPersistable> getDirtyObjects() {
-        return null;
+    public static Collection<EFPersistable> getDirtyObjects() {
+        ArrayList<EFPersistable> dirtyEntities = new ArrayList<>();
+        for(Entity entity: entities)
+        {
+            if(entity.isObjectDirty())
+                dirtyEntities.add(entity.getObject());
+        }
+
+        return Collections.unmodifiableCollection(dirtyEntities);
     }
 
     public static void forceAdd(EFPersistable objectToAdd) {

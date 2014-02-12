@@ -35,7 +35,7 @@ public class EntityTest {
     }
 
     @Test
-    public void crreateEntityAndMarkDirtyAndGetDirty() {
+    public void createEntityAndMarkDirtyAndGetDirty() {
         EFAttributeTestClass empty = new EFAttributeTestClass(1);
         Entity entity = new Entity(empty);
         Assert.assertFalse(entity.isObjectDirty());
