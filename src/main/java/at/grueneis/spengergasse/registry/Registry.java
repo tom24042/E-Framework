@@ -35,7 +35,7 @@ public class Registry {
     }
 
     public static void forceAdd(BasePersistable objectToAdd) {
-        if (!entities.contains(objectToAdd)) {
+        if (entities.contains(objectToAdd)) {
             entities.remove(new Entity(objectToAdd));
         }
         entities.add(new Entity(objectToAdd));
