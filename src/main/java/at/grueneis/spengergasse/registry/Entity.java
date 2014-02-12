@@ -13,6 +13,7 @@ import java.util.Arrays;
 public class Entity {
     private BasePersistable originalObject;
     private int originalHashValue;
+    private boolean dirtyFlag;
 
     public Entity(BasePersistable objectToSave) {
         this.originalObject = objectToSave;
@@ -24,7 +25,7 @@ public class Entity {
     }
 
     public boolean isObjectDirty() {
-        return originalHashValue != calculateHashValueOfOriginalObject();
+        return (originalHashValue != calculateHashValueOfOriginalObject()) || dirtyFlag;
     }
 
     private int calculateHashValueOfOriginalObject() {
@@ -60,5 +61,10 @@ public class Entity {
         } else {
             return false;
         }
+    }
+
+    public void markDirty()
+    {
+        dirtyFlag = true;
     }
 }
