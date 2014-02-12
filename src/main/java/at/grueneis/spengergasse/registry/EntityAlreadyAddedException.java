@@ -1,18 +1,16 @@
 package at.grueneis.spengergasse.registry;
 
-import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
-
 /**
  * Created by gradnig on 31.01.14.
  */
 public class EntityAlreadyAddedException extends Exception {
-    private BasePersistable failedObject;
+    private EFPersistable failedObject;
 
-    public EntityAlreadyAddedException(BasePersistable addedObject) {
+    public EntityAlreadyAddedException(EFPersistable addedObject) {
         failedObject = addedObject;
     }
 
-    public BasePersistable getFailedObject() {
+    public EFPersistable getFailedObject() {
         return failedObject;
     }
 }

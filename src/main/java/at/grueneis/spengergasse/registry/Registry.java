@@ -1,9 +1,8 @@
 package at.grueneis.spengergasse.registry;
 
-import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
-
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,7 +12,7 @@ public class Registry {
 
     private static ArrayList<Entity> entities = new ArrayList<Entity>();
 
-    public static void add(BasePersistable objectToAdd) throws EntityAlreadyAddedException {
+    public static void add(EFPersistable objectToAdd) throws EntityAlreadyAddedException {
         if (!entities.contains(new Entity(objectToAdd))) {
             entities.add(new Entity(objectToAdd));
         } else {
@@ -21,7 +20,7 @@ public class Registry {
         }
     }
 
-    public static BasePersistable get(Long id, Class<BasePersistable> type) {
+    public static EFPersistable get(Long id, Class<EFPersistable> type) {
         for (Entity e : entities) {
             if (e.getObject().getId() == id) {
                 return e.getObject();
@@ -30,14 +29,24 @@ public class Registry {
         throw new EntityNotFoundException(id, type);
     }
 
-    public static List<BasePersistable> getDirtyObjects() {
-        return null;
+    public static List<EFPersistable> getDirtyObjects() {
+        ArrayList<EFPersistable> dirtyEntities = new ArrayList<>();
+        for(Entity entity: entities)
+        {
+            if(entity.isObjectDirty())
+                dirtyEntities.add(entity.getObject());
+        }
+
+        return Collections.unmodifiableList(dirtyEntities) ;
     }
 
-    public static void forceAdd(BasePersistable objectToAdd) {
+    public static void forceAdd(EFPersistable objectToAdd) {
         if (entities.contains(objectToAdd)) {
             entities.remove(new Entity(objectToAdd));
         }
-        entities.add(new Entity(objectToAdd));
+        Entity newEntity = new Entity(objectToAdd);
+        newEntity.markDirty();
+        entities.add(newEntity);
+
     }
 }

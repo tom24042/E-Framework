@@ -33,4 +33,13 @@ public class EntityTest {
         empty.setString("HELLO THERE");
         Assert.assertTrue(entity.isObjectDirty());
     }
+
+    @Test
+    public void createEntityAndMarkDirtyAndGetDirty() {
+        EFAttributeTestClass empty = new EFAttributeTestClass(1);
+        Entity entity = new Entity(empty);
+        Assert.assertFalse(entity.isObjectDirty());
+        entity.markDirty();
+        Assert.assertTrue(entity.isObjectDirty());
+    }
 }
