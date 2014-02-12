@@ -1,7 +1,5 @@
 package at.grueneis.spengergasse.registry;
 
-import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
-
 /**
  * Created with IntelliJ IDEA.
  * User: oscar
@@ -9,13 +7,19 @@ import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
  * Time: 10:45 AM
  * To change this template use File | Settings | File Templates.
  */
-public class EFAttributeTestClass extends BasePersistable
+public class EFAttributeTestClass implements EFPersistable
 {
     private String m_String;
+    private Long m_Id;
+
+    @Override
+    public Long getId() {
+        return m_Id;
+    }
 
     public EFAttributeTestClass(long id)
     {
-        this.setId(id);
+        m_Id = id;
     }
 
     @EFAttribute

@@ -1,26 +1,22 @@
 package at.grueneis.spengergasse.registry;
 
-import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
-
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * Internal class used for saving objects and information
  */
 
 public class Entity {
-    private BasePersistable originalObject;
+    private EFPersistable originalObject;
     private int originalHashValue;
     private boolean dirtyFlag;
 
-    public Entity(BasePersistable objectToSave) {
+    public Entity(EFPersistable objectToSave) {
         this.originalObject = objectToSave;
         this.originalHashValue = calculateHashValueOfOriginalObject();
     }
 
-    protected BasePersistable getObject() {
+    protected EFPersistable getObject() {
         return this.originalObject;
     }
 
