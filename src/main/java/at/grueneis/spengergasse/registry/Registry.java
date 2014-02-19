@@ -42,21 +42,21 @@ public class Registry {
     }
 
     public static void forceAdd(EFPersistable objectToAdd) {
-        Entity oldEntity = getEntityById(objectToAdd.getId());
+        Entity oldEntity = getEntityObject(objectToAdd);
         if (oldEntity != null) {
             entities.remove(oldEntity);
             Entity newEntity = new Entity(objectToAdd);
-            if (oldEntity.compareWithOtherEntity(newEntity)) ;
-            newEntity.markDirty();
+            if (!oldEntity.compareWithOtherEntity(newEntity))
+                newEntity.markDirty();
             entities.add(newEntity);
         } else {
             entities.add(new Entity(objectToAdd));
         }
     }
 
-    private static Entity getEntityById(Long id) {
+    private static Entity getEntityObject(EFPersistable obj) {
         for (Entity e : entities) {
-            if (e.getObject().getId() == id)
+            if (e.getObject().getId().equals(obj.getId()) && e.getObject().getClass().equals(obj.getClass()))
                 return e;
         }
         return null;
@@ -68,9 +68,9 @@ public class Registry {
 
     public static void clean(EFPersistable entity) {
         if (entity != null) {
-            Entity entityToClean = getEntityById(entity.getId());
+            Entity entityToClean = getEntityObject(entity);
             if(entity != null){
-                getEntityById(entity.getId()).markClean();
+                getEntityObject(entity).markClean();
             }
             else{
                 throw new EntityNotFoundException((long)-1, EFPersistable.class);
@@ -82,8 +82,8 @@ public class Registry {
 
     }
 
-    public static void clean(List<EFPersistable> list) {
-        for (EFPersistable e : list) {
+    public static void clean(List<EFPersistable> list){
+        for(EFPersistable e : list){
             clean(e);
         }
     }
