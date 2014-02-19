@@ -69,8 +69,8 @@ public class Registry {
     public static void clean(EFPersistable entity) {
         if (entity != null) {
             Entity entityToClean = getEntityObject(entity);
-            if(entity != null){
-                getEntityObject(entity).markClean();
+            if(entityToClean != null){
+                entityToClean.markClean();
             }
             else{
                 throw new EntityNotFoundException((long)-1, EFPersistable.class);
