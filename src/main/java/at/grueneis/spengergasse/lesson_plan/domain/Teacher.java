@@ -1,5 +1,5 @@
 /*
- * Joachim Grüneis
+g * Joachim Grüneis
  * Copyright (C) 2013
  * All rights reserved.
  */

@@ -72,7 +72,9 @@ public abstract class BasePersistable {
      */
     public abstract String[] getAllAttributesAsString();
     
-    public String calculateMd5Hash(){
+   
+    
+    private String calculateMd5Hash(){
     	try {
 			MessageDigest md5Generator = MessageDigest.getInstance("MD5");
 			String str = "";
@@ -89,6 +91,4 @@ public abstract class BasePersistable {
     public void updateMd5Hash(){
     	setMd5Hash(calculateMd5Hash());
     }
-    
-    
 }

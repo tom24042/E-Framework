@@ -6,6 +6,7 @@
 package at.grueneis.spengergasse.lesson_plan.persistence.jdbc;
 
 import at.grueneis.spengergasse.lesson_plan.domain.Teacher;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +29,7 @@ public class TeacherDao extends AbstractDatabaseDao<Teacher> {
 
     @Override
     protected String[] otherColumnNames() {
-        return new String[]{"firstname", "lastname", "birthdate", "email", "md5Hash"};
+        return new String[]{"firstname", "lastname", "birthdate", "email", getMd5HashColumnName()};
     }
 
     @Override
@@ -48,7 +49,10 @@ public class TeacherDao extends AbstractDatabaseDao<Teacher> {
             Date birthdate = resultSet.getDate("birthdate");
             String email = resultSet.getString("email");
             String md5Hash = resultSet.getString("md5Hash");
-            return new Teacher(id, firstname, lastname, birthdate, email);
+            
+            Teacher t = new Teacher(id, firstname, lastname, birthdate, email);
+            t.setMd5Hash(md5Hash);
+            return t;
         } catch (SQLException e) {
             throw new LessonPlanDataAccessException("Failed at binding teacher", e);
         }
@@ -61,8 +65,10 @@ public class TeacherDao extends AbstractDatabaseDao<Teacher> {
             preparedStatement.setString(2, entity.getLastname());
             preparedStatement.setDate(3, new java.sql.Date(entity.getBirthdate().getTime()));
             preparedStatement.setString(4, entity.getEmail());
+            preparedStatement.setString(5, entity.getMd5Hash());
         } catch (SQLException e) {
             throw new LessonPlanDataAccessException("Failed at setting attributes into statement", e);
         }
     }
+
 }

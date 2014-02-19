@@ -6,6 +6,7 @@
 package at.grueneis.spengergasse.lesson_plan.persistence.jdbc;
 
 import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,6 +32,8 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     private PreparedStatement insertStatement;
 
     private PreparedStatement updateStatement;
+    
+    private PreparedStatement hashByIdStatement;
 
     private PreparedStatement deleteStatement;
 
@@ -114,7 +117,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
             throw new LessonPlanDataAccessException("Failed to create insert statement", e);
         }
     }
-
+    
     private PreparedStatement updateStatement() {
         try {
             if (updateStatement == null) {
@@ -130,6 +133,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
                     }
                 }
                 statementText.append(" WHERE ").append(idColumnName()).append(" = ? ");
+//                statementText.append(" AND (select " + getMd5HashColumnName() + " from " + tableName() + " where "+idColumnName()+"=?) = ?" );
                 System.out.println("Creating SQL statement: " + statementText);
                 updateStatement = connection().prepareStatement(statementText.toString());
             }
@@ -139,6 +143,19 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
         }
     }
 
+    private PreparedStatement hashByIdStatement(){
+    	try{
+    	if(hashByIdStatement == null){
+    		String res = "select " + getMd5HashColumnName() + " from " + tableName() + 
+    				" where id = ? and " + getMd5HashColumnName() +  " = ?";
+    		hashByIdStatement = connection().prepareStatement(res);
+    	}
+    	return hashByIdStatement;
+    	 } catch (SQLException e) {
+             throw new LessonPlanDataAccessException("Failed to create hashByIdStatement", e);
+         }
+    }
+    
     private PreparedStatement deleteStatement() {
         try {
             if (deleteStatement == null) {
@@ -227,14 +244,12 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     @Override
     public void save(T t) {
         if (t.getId() == null) {
-        	t.updateMd5Hash();
             insert(t);
         } else {
-        	T fromDB = findById(t.getId());
-        	if(!t.getMd5Hash().equals(fromDB.getMd5Hash())){
-        		throw new LessonPlanDataAccessException("Could not update in DB because object has been changed in DB since last loading!");
-        	}
-        	t.updateMd5Hash();
+//        	T fromDB = findById(t.getId());
+//        	if(!t.getMd5Hash().equals(fromDB.getMd5Hash())){
+//        		throw new LessonPlanDataAccessException("Could not update in DB because object has been changed in DB since last loading!");
+//        	}
             update(t);
         }
     }
@@ -244,6 +259,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
             PreparedStatement insertStmnt = insertStatement();
             Long newId = generateNewId();
             t.setId(newId);
+            t.updateMd5Hash();
             setValuesOfOtherColumnsIntoStatment(insertStmnt, t);
             insertStmnt.setLong(otherColumnNames().length + 1, t.getId());
             int effectedRowCount = insertStmnt.executeUpdate();
@@ -258,10 +274,24 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     }
 
     private void update(T t) {
+    	
+    	try {
+    		PreparedStatement findHashByIdStmnt = hashByIdStatement();
+			findHashByIdStmnt.setLong(1, t.getId());
+			findHashByIdStmnt.setString(2, t.getMd5Hash());
+			boolean hashFound = findHashByIdStmnt.executeQuery().first();
+			if(!hashFound) throw new LessonPlanDataAccessException("Failed at update because the entity has been changed in DB since last loading");
+		} catch (SQLException e1) {
+			throw new LessonPlanDataAccessException("Failed at update because the entity has been changed in DB since last loading", e1);
+		}
         try {
             PreparedStatement updateStmnt = updateStatement();
+            String oldMd5fromToHash = t.getMd5Hash();
+            t.updateMd5Hash();
             setValuesOfOtherColumnsIntoStatment(updateStmnt, t);
             updateStmnt.setLong(otherColumnNames().length + 1, t.getId());
+//            updateStmnt.setLong(otherColumnNames().length + 2, t.getId());
+//            updateStmnt.setString(otherColumnNames().length + 3, oldMd5fromToHash);
             int effectedRowCount = updateStmnt.executeUpdate();
             if (effectedRowCount == 0) {
                 throw  new LessonPlanDataAccessException("Update did not find a matching row.");
@@ -276,6 +306,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     @Override
     public void delete(T t) {
         delete(t.getId());
+        t.setId(null);
     }
 
     @Override
@@ -314,5 +345,9 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
 
     private Long generateNewId() {
         return new Random().nextLong();
+    }
+    
+    public String getMd5HashColumnName(){
+    	return "md5Hash";
     }
 }
