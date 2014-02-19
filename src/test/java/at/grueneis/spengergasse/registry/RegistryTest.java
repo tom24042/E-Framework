@@ -64,6 +64,21 @@ public class RegistryTest {
     public void forceAddObject() {
         EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
         Registry.forceAdd(objectToAdd);
+
+        Assert.assertTrue(Registry.get(objectToAdd.getId(), EFAttributeTestClass.class) != null);
+    }
+
+    @Test
+    public void forceAddObjectTwice() {
+        EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
+        objectToAdd.setString("Sad");
+        Registry.forceAdd(objectToAdd);
+
+        EFAttributeTestClass duplicateObject = new EFAttributeTestClass(1);
+        duplicateObject.setString("Happy");
+        Registry.forceAdd(duplicateObject);
+
+        Assert.assertTrue(Registry.getDirtyObjects().size() == 1);
     }
 
     @Test (expected = EntityNotFoundException.class)
