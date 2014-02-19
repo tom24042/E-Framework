@@ -91,6 +91,7 @@ public class RegistryTest {
         Registry.clean((EFPersistable)null);
     }
 
+    @Test (expected = EntityNotFoundException.class)
     public void tryCleanObjectWhichIsNotInRegistry(){
         Registry.clean(new EFPersistable() {
             @Override
@@ -162,5 +163,38 @@ public class RegistryTest {
         Assert.assertTrue(Registry.getDirtyObjects().size() == 3);
         Registry.clean(Registry.getDirtyObjects());
         Assert.assertTrue(Registry.getDirtyObjects().size() == 0);
+    }
+
+    @Test
+    public void addTwoDifferentObjectsAndGetBoth(){
+        EFAttributeTestClass foo = new EFAttributeTestClass(1);
+        EFAttributeTestClassTwo bar = new EFAttributeTestClassTwo(1);
+
+        foo.setString("Hello");
+        bar.setString("Yellow");
+
+        try {
+            Registry.add(foo);
+            Registry.add(bar);
+        }
+        catch(EntityAlreadyAddedException e){
+            Assert.fail("Two entities of different classes with same IDs couldn't be added both");
+        }
+
+        foo.setString("Hello");
+        bar.setString("Yellow");
+
+        Assert.assertTrue(Registry.getDirtyObjects().size() == 0);
+
+        try {
+            EFAttributeTestClass fooReturn = (EFAttributeTestClass) Registry.get(foo.getId(), EFAttributeTestClass.class);
+            EFAttributeTestClassTwo barReturn = (EFAttributeTestClassTwo) Registry.get(bar.getId(), EFAttributeTestClassTwo.class);
+
+            Assert.assertTrue(fooReturn != null);
+            Assert.assertTrue(barReturn != null);
+        }
+        catch(EntityNotFoundException e){
+            Assert.fail("Couldn't find both entities");
+        }
     }
 }
