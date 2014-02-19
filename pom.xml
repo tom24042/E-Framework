@@ -230,16 +230,16 @@
 
 
     <!-- More Project Information -->
-    <name>2013_POS_4AHIF</name>
-    <description>A sample project for POS with the class 4AHIF</description>
+    <name>E-Framework</name>
+    <description>A sample Java Project of asdf Programming</description>
     <!-- <url>...</url> -->
     <!-- <inceptionYear>...</inceptionYear> -->
     <!-- <licenses>...</licenses> -->
     <!-- <organization>...</organization> -->
     <developers>
         <developer>
-            <name>Joachim Grüneis</name>
-            <email>grueneis@spengergasse.at</email>
+            <name>4AHIF</name>
+            <email>sch14277@spengergasse.at</email>
         </developer>
     </developers>
     <!-- <contributors>...</contributors> -->
@@ -251,9 +251,9 @@
     <!-- <mailingLists>...</mailingLists> -->
     <!-- <scm>...</scm> -->
     <scm>
-        <url>https://github.com/grueneis-spengergasse/2013_POS_4AHIF</url>
-        <connection>scm:git:git://github.com/grueneis-spengergasse/2013_POS_4AHIF.git</connection>
-        <developerConnection>scm:git:git@github.com:grueneis-spengergasse/2013_POS_4AHIF.git</developerConnection>
+        <url>https://github.com/stuka120/E-Framework</url>
+        <connection>scm:git:git://github.com/stuka120/E-Framework.git</connection>
+        <developerConnection>scm:git:git@github.com:stuka120/E-Framework.git</developerConnection>
     </scm>
     <!-- <prerequisites>...</prerequisites> -->
     <!-- <repositories>...</repositories> -->
