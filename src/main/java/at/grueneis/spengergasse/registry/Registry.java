@@ -66,12 +66,24 @@ public class Registry {
         entities = new ArrayList<Entity>();
     }
 
-    public static void clean(EFPersistable entity){
-        getEntityById(entity.getId()).markClean();
+    public static void clean(EFPersistable entity) {
+        if (entity != null) {
+            Entity entityToClean = getEntityById(entity.getId());
+            if(entity != null){
+                getEntityById(entity.getId()).markClean();
+            }
+            else{
+                throw new EntityNotFoundException((long)-1, EFPersistable.class);
+            }
+
+        } else {
+            throw new EntityNotFoundException((long)-1, EFPersistable.class);
+        }
+
     }
 
-    public static void clean(List<EFPersistable> list){
-        for(EFPersistable e : list){
+    public static void clean(List<EFPersistable> list) {
+        for (EFPersistable e : list) {
             clean(e);
         }
     }

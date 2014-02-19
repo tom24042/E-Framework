@@ -1,5 +1,6 @@
 package at.grueneis.spengergasse.registry;
 
+import at.grueneis.spengergasse.lesson_plan.domain.Lesson;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import org.junit.Test;
 public class RegistryTest {
 
     @Before
-    public void cleanup(){
+    public void cleanup() {
         Registry.emptyRegistry();
     }
 
@@ -45,22 +46,47 @@ public class RegistryTest {
     }
 
     @Test
-    public void addEntityToRegistryAndGetItAgainByID() throws EntityAlreadyAddedException  {
+    public void addEntityToRegistryAndGetItAgainByID() throws EntityAlreadyAddedException {
         EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
 
         Registry.add(objectToAdd);
 
-        EFAttributeTestClass objectFromRegistry = (EFAttributeTestClass) Registry.get((long)1, EFAttributeTestClass.class);
+        EFAttributeTestClass objectFromRegistry = (EFAttributeTestClass) Registry.get((long) 1, EFAttributeTestClass.class);
         Assert.assertTrue(objectFromRegistry.getId() == 1);
     }
 
     @Test
-    public void tryAddEmptyObject() throws EntityAlreadyAddedException{
+    public void tryAddEmptyObject() throws EntityAlreadyAddedException {
         Registry.add(null);
     }
 
     @Test
-    public void addObjectWithReferenceAndChangeReference(){
+    public void forceAddObject() {
+        EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
+        Registry.forceAdd(objectToAdd);
+    }
+
+    @Test (expected = EntityNotFoundException.class)
+    public void tryGetNonExistentObject(){
+        Registry.get((long)1, EFAttributeTestClass.class);
+    }
+
+    @Test(expected =  EntityNotFoundException.class)
+    public void tryCleanNullObject(){
+        Registry.clean((EFPersistable)null);
+    }
+
+    public void tryCleanObjectWhichIsNotInRegistry(){
+        Registry.clean(new EFPersistable() {
+            @Override
+            public Long getId() {
+                return (long)123;
+            }
+        });
+    }
+
+    @Test
+    public void addObjectWithReferenceAndChangeReference() {
         EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
         EFAttributeTestClass reference = new EFAttributeTestClass(2);
 
@@ -74,7 +100,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void addObjectWithReferenceAndChangeBoth(){
+    public void addObjectWithReferenceAndChangeBoth() {
         EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
         EFAttributeTestClass reference = new EFAttributeTestClass(2);
 
@@ -90,7 +116,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void makeObjectDirtyAndCleanItAgain(){
+    public void makeObjectDirtyAndCleanItAgain() {
         EFAttributeTestClass empty = new EFAttributeTestClass(1);
         empty.setString("Foo");
 
@@ -101,7 +127,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void makeDirtyObjectsAndCleanAll(){
+    public void makeDirtyObjectsAndCleanAll() {
         EFAttributeTestClass foo = new EFAttributeTestClass(1);
         EFAttributeTestClass bar = new EFAttributeTestClass(2);
         EFAttributeTestClass tom = new EFAttributeTestClass(3);
