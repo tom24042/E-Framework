@@ -1,6 +1,7 @@
 package at.grueneis.spengergasse.registry;
 
 import java.lang.reflect.Method;
+import java.rmi.registry.*;
 
 /**
  * Internal class used for saving objects and information
@@ -14,6 +15,7 @@ public class Entity {
     public Entity(EFPersistable objectToSave) {
         this.originalObject = objectToSave;
         this.originalHashValue = calculateHashValueOfOriginalObject();
+        addMissingReferencesToRegistry();
     }
 
     protected EFPersistable getObject() {
@@ -39,10 +41,40 @@ public class Entity {
                         throw new RuntimeException(ex);
                     }
                 }
+                if (method.isAnnotationPresent(EFReference.class)) {
+                    try {
+                        EFPersistable reference = (EFPersistable) (method.invoke(originalObject, null));
+                        if (reference != null)
+                            hashValue += reference.getId().hashCode();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
             }
         }
-
         return hashValue;
+    }
+
+    private void addMissingReferencesToRegistry() {
+        Class originalObjectClass = originalObject.getClass();
+        Method[] methods = originalObjectClass.getDeclaredMethods();
+
+        int hashValue = 0;
+
+        for (Method method : methods) {
+            if (method.getParameterTypes().length == 0) {
+                if (method.isAnnotationPresent(EFReference.class)) {
+                    try {
+                        Registry.add((EFPersistable) (method.invoke(originalObject, null)));
+                    } catch (EntityAlreadyAddedException ex) {
+
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                }
+            }
+        }
     }
 
     @Override
@@ -59,8 +91,16 @@ public class Entity {
         }
     }
 
-    public void markDirty()
-    {
+    protected void markDirty() {
         dirtyFlag = true;
+    }
+
+    protected void markClean() {
+        dirtyFlag = false;
+        originalHashValue = calculateHashValueOfOriginalObject();
+    }
+
+    protected boolean compareWithOtherEntity(Entity other) {
+        return other.calculateHashValueOfOriginalObject() == calculateHashValueOfOriginalObject();
     }
 }
