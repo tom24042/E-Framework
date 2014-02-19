@@ -83,12 +83,12 @@ public class RegistryTest {
 
     @Test (expected = EntityNotFoundException.class)
     public void tryGetNonExistentObject(){
-        Registry.get((long)1, EFAttributeTestClass.class);
+        Registry.get((long) 1, EFAttributeTestClass.class);
     }
 
     @Test(expected =  EntityNotFoundException.class)
     public void tryCleanNullObject(){
-        Registry.clean((EFPersistable)null);
+        Registry.clean((EFPersistable) null);
     }
 
     @Test (expected = EntityNotFoundException.class)
@@ -96,7 +96,7 @@ public class RegistryTest {
         Registry.clean(new EFPersistable() {
             @Override
             public Long getId() {
-                return (long)123;
+                return (long) 123;
             }
         });
     }
@@ -163,6 +163,12 @@ public class RegistryTest {
         Assert.assertTrue(Registry.getDirtyObjects().size() == 3);
         Registry.clean(Registry.getDirtyObjects());
         Assert.assertTrue(Registry.getDirtyObjects().size() == 0);
+    }
+    @Test(expected = EntityNotFoundException.class)
+    public void cleanWithNotAddedObject()
+    {
+        EFAttributeTestClass foo = new EFAttributeTestClass(1);
+        Registry.clean(foo);
     }
 
     @Test
