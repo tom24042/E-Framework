@@ -42,4 +42,18 @@ public class EntityTest {
         entity.markDirty();
         Assert.assertTrue(entity.isObjectDirty());
     }
+
+    @Test
+    public void createEntityWithReferenceAndChangeIt(){
+        EFAttributeTestClass empty = new EFAttributeTestClass(1);
+        EFAttributeTestClass reference = new EFAttributeTestClass(2);
+        EFAttributeTestClass secondReference = new EFAttributeTestClass(3);
+
+        empty.setChild(reference);
+        Entity entity = new Entity(empty);
+
+        empty.setChild(secondReference);
+
+        Assert.assertTrue(entity.isObjectDirty());
+    }
 }

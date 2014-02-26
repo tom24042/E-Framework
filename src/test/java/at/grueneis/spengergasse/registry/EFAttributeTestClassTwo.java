@@ -1,13 +1,9 @@
 package at.grueneis.spengergasse.registry;
 
 /**
- * Created with IntelliJ IDEA.
- * User: oscar
- * Date: 1/31/14
- * Time: 10:45 AM
- * To change this template use File | Settings | File Templates.
+ * Created by gradnig on 19.02.14.
  */
-public class EFAttributeTestClass implements EFPersistable {
+public class EFAttributeTestClassTwo implements EFPersistable{
     private String m_String;
     private Long m_Id;
     private EFAttributeTestClass m_Child;
@@ -17,13 +13,13 @@ public class EFAttributeTestClass implements EFPersistable {
         return m_Id;
     }
 
-    public EFAttributeTestClass(long id) {
+    public EFAttributeTestClassTwo(long id) {
         m_Id = id;
     }
 
     @EFAttribute
     public int getInt() {
-        return 25;
+        return 13;
     }
 
     @EFAttribute
@@ -48,3 +44,4 @@ public class EFAttributeTestClass implements EFPersistable {
         return m_Child;
     }
 }
+
