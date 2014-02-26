@@ -9,25 +9,25 @@ import org.junit.Test;
  * Created by Daniel on 22/01/14.
  */
 public class RegistryTest {
+	Registry registry = Registry.getInstance();
 
     @Before
     public void cleanup() {
-        Registry.emptyRegistry();
+        registry.emptyRegistry();
     }
 
     @Test
     public void addObjectToRegistry() throws EntityAlreadyAddedException {
         EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
-
-        Registry.add(objectToAdd);
+        registry.add(objectToAdd);
     }
 
     @Test(expected = EntityAlreadyAddedException.class)
     public void addObjectToRegistryTwice() throws EntityAlreadyAddedException {
         EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
 
-        Registry.add(objectToAdd);
-        Registry.add(objectToAdd);
+		registry.add(objectToAdd);
+        registry.add(objectToAdd);
     }
 
     @Test
@@ -38,62 +38,62 @@ public class RegistryTest {
         unmodifiedObject.setString("Hansi");
         modifiedObject.setString("Herbert");
 
-        Registry.add(unmodifiedObject);
-        Registry.add(modifiedObject);
+		registry.add(unmodifiedObject);
+        registry.add(modifiedObject);
         modifiedObject.setString("Hugo");
 
-        Assert.assertTrue(Registry.getDirtyObjects().size() == 1);
+        Assert.assertTrue(registry.getDirtyObjects().size() == 1);
     }
 
     @Test
     public void addEntityToRegistryAndGetItAgainByID() throws EntityAlreadyAddedException {
         EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
 
-        Registry.add(objectToAdd);
+		registry.add(objectToAdd);
 
-        EFAttributeTestClass objectFromRegistry = (EFAttributeTestClass) Registry.get((long) 1, EFAttributeTestClass.class);
+        EFAttributeTestClass objectFromRegistry = (EFAttributeTestClass) registry.get((long) 1, EFAttributeTestClass.class);
         Assert.assertTrue(objectFromRegistry.getId() == 1);
     }
 
     @Test
     public void tryAddEmptyObject() throws EntityAlreadyAddedException {
-        Registry.add(null);
+		registry.add(null);
     }
 
     @Test
     public void forceAddObject() {
         EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
-        Registry.forceAdd(objectToAdd);
+		registry.forceAdd(objectToAdd);
 
-        Assert.assertTrue(Registry.get(objectToAdd.getId(), EFAttributeTestClass.class) != null);
+        Assert.assertTrue(registry.get(objectToAdd.getId(), EFAttributeTestClass.class) != null);
     }
 
     @Test
     public void forceAddObjectTwice() {
         EFAttributeTestClass objectToAdd = new EFAttributeTestClass(1);
         objectToAdd.setString("Sad");
-        Registry.forceAdd(objectToAdd);
+		registry.forceAdd(objectToAdd);
 
         EFAttributeTestClass duplicateObject = new EFAttributeTestClass(1);
         duplicateObject.setString("Happy");
-        Registry.forceAdd(duplicateObject);
+		registry.forceAdd(duplicateObject);
 
-        Assert.assertTrue(Registry.getDirtyObjects().size() == 1);
+        Assert.assertTrue(registry.getDirtyObjects().size() == 1);
     }
 
     @Test (expected = EntityNotFoundException.class)
     public void tryGetNonExistentObject(){
-        Registry.get((long) 1, EFAttributeTestClass.class);
+		registry.get((long) 1, EFAttributeTestClass.class);
     }
 
     @Test(expected =  EntityNotFoundException.class)
     public void tryCleanNullObject(){
-        Registry.clean((EFPersistable) null);
+		registry.clean((EFPersistable) null);
     }
 
     @Test (expected = EntityNotFoundException.class)
     public void tryCleanObjectWhichIsNotInRegistry(){
-        Registry.clean(new EFPersistable() {
+		registry.clean(new EFPersistable() {
             @Override
             public Long getId() {
                 return (long) 123;
@@ -109,10 +109,10 @@ public class RegistryTest {
         reference.setString("Not Daniel D:");
         objectToAdd.setChild(reference);
 
-        Registry.add(objectToAdd);
+		registry.add(objectToAdd);
 
         reference.setString("Daniel :D");
-        Assert.assertTrue(Registry.getDirtyObjects().size() == 1);
+        Assert.assertTrue(registry.getDirtyObjects().size() == 1);
     }
 
     @Test
@@ -124,11 +124,11 @@ public class RegistryTest {
         reference.setString("Not Daniel D:");
         objectToAdd.setChild(reference);
 
-        Registry.add(objectToAdd);
+		registry.add(objectToAdd);
 
         objectToAdd.setString("Herbert :/");
         reference.setString("Daniel :D");
-        Assert.assertTrue(Registry.getDirtyObjects().size() == 2);
+        Assert.assertTrue(registry.getDirtyObjects().size() == 2);
     }
 
     @Test
@@ -136,10 +136,10 @@ public class RegistryTest {
         EFAttributeTestClass empty = new EFAttributeTestClass(1);
         empty.setString("Foo");
 
-        Registry.add(empty);
-        Registry.clean(empty);
+        registry.add(empty);
+        registry.clean(empty);
 
-        Assert.assertTrue(Registry.getDirtyObjects().size() == 0);
+        Assert.assertTrue(registry.getDirtyObjects().size() == 0);
     }
 
     @Test
@@ -152,23 +152,23 @@ public class RegistryTest {
         bar.setString("Bar");
         tom.setString("Tom");
 
-        Registry.add(foo);
-        Registry.add(bar);
-        Registry.add(tom);
+        registry.add(foo);
+        registry.add(bar);
+        registry.add(tom);
 
         foo.setString("WRONG");
         bar.setString("WRONG");
         tom.setString("WRONG");
 
-        Assert.assertTrue(Registry.getDirtyObjects().size() == 3);
-        Registry.clean(Registry.getDirtyObjects());
-        Assert.assertTrue(Registry.getDirtyObjects().size() == 0);
+        Assert.assertTrue(registry.getDirtyObjects().size() == 3);
+        registry.clean(registry.getDirtyObjects());
+        Assert.assertTrue(registry.getDirtyObjects().size() == 0);
     }
     @Test(expected = EntityNotFoundException.class)
     public void cleanWithNotAddedObject()
     {
         EFAttributeTestClass foo = new EFAttributeTestClass(1);
-        Registry.clean(foo);
+        registry.clean(foo);
     }
 
     @Test
@@ -180,8 +180,8 @@ public class RegistryTest {
         bar.setString("Yellow");
 
         try {
-            Registry.add(foo);
-            Registry.add(bar);
+            registry.add(foo);
+            registry.add(bar);
         }
         catch(EntityAlreadyAddedException e){
             Assert.fail("Two entities of different classes with same IDs couldn't be added both");
@@ -190,11 +190,11 @@ public class RegistryTest {
         foo.setString("Hello");
         bar.setString("Yellow");
 
-        Assert.assertTrue(Registry.getDirtyObjects().size() == 0);
+        Assert.assertTrue(registry.getDirtyObjects().size() == 0);
 
         try {
-            EFAttributeTestClass fooReturn = (EFAttributeTestClass) Registry.get(foo.getId(), EFAttributeTestClass.class);
-            EFAttributeTestClassTwo barReturn = (EFAttributeTestClassTwo) Registry.get(bar.getId(), EFAttributeTestClassTwo.class);
+            EFAttributeTestClass fooReturn = (EFAttributeTestClass) registry.get(foo.getId(), EFAttributeTestClass.class);
+            EFAttributeTestClassTwo barReturn = (EFAttributeTestClassTwo) registry.get(bar.getId(), EFAttributeTestClassTwo.class);
 
             Assert.assertTrue(fooReturn != null);
             Assert.assertTrue(barReturn != null);

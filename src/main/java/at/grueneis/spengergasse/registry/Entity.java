@@ -65,7 +65,7 @@ public class Entity {
             if (method.getParameterTypes().length == 0) {
                 if (method.isAnnotationPresent(EFReference.class)) {
                     try {
-                        Registry.add((EFPersistable) (method.invoke(originalObject, null)));
+                        Registry.getInstance().add((EFPersistable) (method.invoke(originalObject, null)));
                     } catch (EntityAlreadyAddedException ex) {
 
                     } catch (Exception ex) {
