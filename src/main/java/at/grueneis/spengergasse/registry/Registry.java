@@ -32,16 +32,18 @@ public class Registry {
         throw new EntityNotFoundException(id, type);
     }
 
-    public boolean contains(Long id, Class type)
+    public void delete(EFPersistable objToDelete) throws EntityNotFoundException
     {
-        try {
-            get(id, type);
-            return true;
-        }
-        catch (EntityNotFoundException ex)
+        boolean deleted = entities.remove(objToDelete);
+        if(!deleted)
         {
-            return false;
+            throw new EntityNotFoundException(objToDelete.getId(), EFPersistable.class);
         }
+    }
+
+    public void delete(Long id, Class type) throws EntityNotFoundException
+    {
+        delete(get(id, type));
     }
 
     public  List<EFPersistable> getDirtyObjects() {
