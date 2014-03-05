@@ -25,11 +25,23 @@ public class Registry {
 
     public EFPersistable get(Long id, Class type) {
         for (Entity e : entities) {
-            if (e.getObject().getId() == id && e.getObject().getClass() == type) {
+            if (e.getObject().getId() == id && e.getObject().getClass().equals(type)) {
                 return e.getObject();
             }
         }
         throw new EntityNotFoundException(id, type);
+    }
+
+    public boolean contains(Long id, Class type)
+    {
+        try {
+            get(id, type);
+            return true;
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return false;
+        }
     }
 
     public  List<EFPersistable> getDirtyObjects() {
