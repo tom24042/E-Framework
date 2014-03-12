@@ -7,7 +7,7 @@ import java.rmi.registry.*;
  * Internal class used for saving objects and information
  */
 
-public class Entity {
+class Entity {
     private EFPersistable originalObject;
     private int originalHashValue;
     private boolean dirtyFlag;
