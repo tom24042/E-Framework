@@ -100,10 +100,10 @@ public class Lesson extends BasePersistable{
 //		    private final ClassRoom classRoom;
 //		    private final SchoolClass schoolClass;
 		return new String[]{
-			teachingUnit.calculateMd5Hash(),
-			teacher.calculateMd5Hash(),
-			classRoom.calculateMd5Hash(),
-			schoolClass.calculateMd5Hash()
+			""+teachingUnit.getId(),
+			""+teacher.getId(),
+			""+classRoom.getId(),
+			""+schoolClass.getId()
 		};
 	}
 }
