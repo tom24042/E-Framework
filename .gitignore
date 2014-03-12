@@ -1,3 +1,5 @@
 .idea/
 pos.iml
 target/
+src/test/resources/teachers
+src/test/resources/teachingUnits
