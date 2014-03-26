@@ -45,8 +45,8 @@
     <!-- <dependencyManagement>...</dependencyManagement> -->
     <!-- <modules>...</modules> -->
     <properties>
-        <jdk.version>1.7</jdk.version>
-        <jacoco.version>0.6.3.201306030806</jacoco.version>
+        <jdk.version>1.8</jdk.version>
+        <jacoco.version>0.7.0.201403182114</jacoco.version>
         <jacoco.ut.execution.data.file>${project.build.directory}/coverage-reports/jacoco-ut.exec
         </jacoco.ut.execution.data.file>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
